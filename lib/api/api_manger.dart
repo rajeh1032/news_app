@@ -8,9 +8,9 @@ import 'package:news_app/model/source_response.dart';
 
 class ApiManger {
   ///https://newsapi.org/v2/top-headlines/sources?apiKey=API_KEY
-  static Future<SourceResponse?> getSources() async {
+  static Future<SourceResponse?> getSources(String categoryId) async {
     Uri url = Uri.https(ApiConstant.baseUrl, EndPoint.sourceApi,
-        {'apiKey': ApiConstant.apiKey});
+        {'apiKey': ApiConstant.apiKey, 'category': categoryId});
     try {
       var response = await http.get(url);
       var bodyString = response.body;

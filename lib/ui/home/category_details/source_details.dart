@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manger.dart';
+import 'package:news_app/model/my_category.dart';
 import 'package:news_app/model/source_response.dart';
-import 'package:news_app/ui/home/news/news_item.dart';
+import 'package:news_app/ui/home/category_details/source_tab_widget.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
 
-class NewsWidget extends StatefulWidget {
-  NewsWidget({required this.source});
-
-  Source source;
-
+class SourceDetails extends StatefulWidget {
+  SourceDetails({required this.category});
+  MyCategory category;
   @override
-  State<NewsWidget> createState() => _NewsWidgetState();
+  State<SourceDetails> createState() => _SourceDetailsState();
 }
 
-class _NewsWidgetState extends State<NewsWidget> {
+class _SourceDetailsState extends State<SourceDetails> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: ApiManger.getNewsBySourceId(widget.source.id ?? ""),
+    return FutureBuilder<SourceResponse?>(
+        future: ApiManger.getSources(widget.category.id ?? ""),
         builder: (context, snapshot) {
-          //todo:if is loading
+          //todo:loading
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.greyColor,
-              ),
-            );
+                child: CircularProgressIndicator(
+              color: AppColors.greyColor,
+            ));
           }
           //todo: error client
-
           else if (snapshot.hasError) {
             Text(
               "SomeThing went wrong",
@@ -38,7 +35,7 @@ class _NewsWidgetState extends State<NewsWidget> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  ApiManger.getNewsBySourceId(widget.source.id ?? "");
+                  ApiManger.getSources(widget.category.id ?? "");
                 });
               },
               child: Text(
@@ -47,19 +44,19 @@ class _NewsWidgetState extends State<NewsWidget> {
               ),
             );
           }
-
           //todo: server => response (success , error)?
           //todo: 1- server => response error
-
           if (snapshot.data?.status != 'ok') {
             return Column(
               children: [
-                Text(snapshot.data!.message!,
-                    style: Theme.of(context).textTheme.headlineLarge),
+                Text(
+                  snapshot.data!.message!,
+                  style: AppStyles.medium18Black,
+                ),
                 ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        ApiManger.getNewsBySourceId(widget.source.id ?? "");
+                        ApiManger.getSources(widget.category.id ?? "");
                       });
                     },
                     child: Text(
@@ -69,13 +66,11 @@ class _NewsWidgetState extends State<NewsWidget> {
               ],
             );
           }
-
-          var newsList = snapshot.data?.articles ?? [];
-          return ListView.builder(
-              itemCount: newsList.length,
-              itemBuilder: (context, index) {
-                return NewsItem(news: newsList[index]);
-              });
+          //todo: 2- server => response successful
+          var sourceList = snapshot.data?.sources ?? [];
+          return SourceTabWidget(
+            sourceList: sourceList,
+          );
         });
   }
 }

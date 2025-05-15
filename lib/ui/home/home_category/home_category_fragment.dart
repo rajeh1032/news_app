@@ -4,7 +4,7 @@ import 'package:news_app/model/my_category.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 class CategoryFragment extends StatelessWidget {
-  CategoryFragment({required this.onButtonClick});
+  CategoryFragment.HomeCategoryFragment({required this.onButtonClick});
   Function onButtonClick;
   List<MyCategory> categoryList = [];
   @override

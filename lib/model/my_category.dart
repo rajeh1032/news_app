@@ -11,7 +11,7 @@ class MyCategory {
     return [
       MyCategory(
         id: 'general',
-        title: "general",
+        title: "General",
         image: isDark ? AppAsset.genral_dark : AppAsset.genral_light,
       ),
       MyCategory(
@@ -20,29 +20,29 @@ class MyCategory {
         image: isDark ? AppAsset.business_dark : AppAsset.business_light,
       ),
       MyCategory(
-        id: 'sport',
-        title: "sport",
+        id: 'sports',
+        title: "Sports",
         image: isDark ? AppAsset.sports_dark : AppAsset.sports_light,
       ),
       MyCategory(
         id: 'technology',
-        title: "technology",
+        title: "Technology",
         image: isDark ? AppAsset.technology_dark : AppAsset.technology_light,
       ),
       MyCategory(
         id: 'entertainment',
-        title: "entertainment",
+        title: "Entertainment",
         image:
             isDark ? AppAsset.entertianment_dark : AppAsset.entertianment_light,
       ),
       MyCategory(
         id: 'health',
-        title: "health",
+        title: "Health",
         image: isDark ? AppAsset.health_dark : AppAsset.health_light,
       ),
       MyCategory(
         id: 'science',
-        title: "science",
+        title: "Science",
         image: isDark ? AppAsset.science_dark : AppAsset.science_light,
       ),
     ];

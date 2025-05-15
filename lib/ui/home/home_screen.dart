@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/model/my_category.dart';
-import 'package:news_app/ui/home/category_details/category_details.dart';
+import 'package:news_app/ui/home/category_details/source_details.dart';
 import 'package:news_app/ui/home/drawer/home_drawer.dart';
-import 'package:news_app/ui/home/news/category_fragment.dart';
+import 'package:news_app/ui/home/home_category/home_category_fragment.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Home',
+          selectedCategory == null ? 'Home' : selectedCategory!.title,
           style: Theme.of(context).textTheme.headlineLarge,
         ),
       ),
@@ -30,10 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: selectedCategory == null
-          ? CategoryFragment(
+          ? CategoryFragment.HomeCategoryFragment(
               onButtonClick: onCategoryClick,
             )
-          : CategoryDetails(),
+          : SourceDetails(
+              category: selectedCategory!,
+            ),
     );
   }
 
