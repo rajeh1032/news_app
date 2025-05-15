@@ -5,7 +5,7 @@ class NewsResponse {
   String? message;
   String? code;
   int? totalResults;
-  List<Article>? articles;
+  List<News>? articles;
 
   NewsResponse(
       {this.status, this.message, this.code, this.totalResults, this.articles});
@@ -16,7 +16,7 @@ class NewsResponse {
         code: json['code'] as String?,
         totalResults: json['totalResults'] as int?,
         articles: (json['articles'] as List<dynamic>?)
-            ?.map((e) => Article.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => News.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
 
@@ -29,7 +29,7 @@ class NewsResponse {
       };
 }
 
-class Article {
+class News {
   Source? source;
   String? author;
   String? title;
@@ -39,7 +39,7 @@ class Article {
   String? publishedAt;
   String? content;
 
-  Article({
+  News({
     this.source,
     this.author,
     this.title,
@@ -50,7 +50,7 @@ class Article {
     this.content,
   });
 
-  factory Article.fromJson(Map<String, dynamic> json) => Article(
+  factory News.fromJson(Map<String, dynamic> json) => News(
         source: json['source'] == null
             ? null
             : Source.fromJson(json['source'] as Map<String, dynamic>),

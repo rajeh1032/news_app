@@ -38,6 +38,9 @@ dependencies:
   google_fonts: ^6.2.1
   fluttertoast: ^8.2.12
   flutter_native_splash: ^2.4.4
+  cached_network_image: ^3.4.1
+  timeago: ^3.7.1
+  animated_toggle_switch:
 
 dev_dependencies:
   flutter_test:

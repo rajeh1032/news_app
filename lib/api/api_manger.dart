@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:news_app/api/api_constant.dart';
 import 'package:news_app/api/end_point.dart';
+import 'package:news_app/model/news_response.dart';
 import 'package:news_app/model/source_response.dart';
 
 class ApiManger {
@@ -19,6 +20,20 @@ class ApiManger {
       var json = jsonDecode(bodyString); //json
       return SourceResponse.fromJson(json); //object
       // SourceResponse.fromJson(jsonDecode(response.body));}
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  ///https://newsapi.org/v2/everything?apiKey=97dd6c1ac1df483aa508c63a8eed7cf7
+  static Future<NewsResponse?> getNewsBySourceId(String sourceId) async {
+    Uri url = Uri.https(ApiConstant.baseUrl, EndPoint.newsApi,
+        {'apiKey': ApiConstant.apiKey, 'sources': sourceId});
+    try {
+      var response = await http.get(url);
+      var bodyString = response.body;
+      var json = jsonDecode(bodyString);
+      return NewsResponse.fromJson(json);
     } catch (e) {
       throw e;
     }
