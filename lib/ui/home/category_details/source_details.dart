@@ -3,7 +3,7 @@ import 'package:news_app/api/api_manger.dart';
 import 'package:news_app/model/my_category.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/ui/home/category_details/source_tab_widget.dart';
-import 'package:news_app/ui/home/category_details/source_view_model.dart';
+import 'package:news_app/ui/home/category_details/source_view_model_provider.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,7 @@ class SourceDetails extends StatefulWidget {
 }
 
 class _SourceDetailsState extends State<SourceDetails> {
-  SourceViewModel viewModel = SourceViewModel();
+  SourceViewModelProvider viewModel = SourceViewModelProvider();
   @override
   void initState() {
     super.initState();
@@ -27,7 +27,8 @@ class _SourceDetailsState extends State<SourceDetails> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => viewModel,
-      child: Consumer<SourceViewModel>(builder: (context, viewModel, child) {
+      child: Consumer<SourceViewModelProvider>(
+          builder: (context, viewModel, child) {
         if (viewModel.errorMessage != null) {
           //todo: error form server
           return Center(

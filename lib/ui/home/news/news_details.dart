@@ -3,7 +3,7 @@ import 'package:news_app/api/api_manger.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/ui/home/news/news_bottom_shee.dart';
 import 'package:news_app/ui/home/news/news_item.dart';
-import 'package:news_app/ui/home/news/news_view_model.dart';
+import 'package:news_app/ui/home/news/news_view_model_provider.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,7 @@ class NewsDeatils extends StatefulWidget {
 }
 
 class _NewsDeatilsState extends State<NewsDeatils> {
-  NewsViewModel viewModel = NewsViewModel();
+  NewsViewModelProvider viewModel = NewsViewModelProvider();
   @override
   void initState() {
     super.initState();
@@ -29,7 +29,8 @@ class _NewsDeatilsState extends State<NewsDeatils> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => viewModel,
-      child: Consumer<NewsViewModel>(builder: (context, viewModel, child) {
+      child:
+          Consumer<NewsViewModelProvider>(builder: (context, viewModel, child) {
         //child is ? widget that can be initialize in consumer and not rebuild or change, will be fixed
         // child = Text(
         //   "Hello",

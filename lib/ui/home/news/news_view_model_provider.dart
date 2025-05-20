@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manger.dart';
 import 'package:news_app/model/news_response.dart';
 
-class NewsViewModel extends ChangeNotifier {
+class NewsViewModelProvider extends ChangeNotifier {
   List<News>? newsList = [];
   String? errorMessage;
   void getNewsL({required String sourceId}) async {

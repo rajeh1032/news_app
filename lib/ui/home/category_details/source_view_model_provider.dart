@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manger.dart';
 import 'package:news_app/model/source_response.dart';
 
-class SourceViewModel extends ChangeNotifier {
+class SourceViewModelProvider extends ChangeNotifier {
   //todo hold data -- handle logic
   List<Source>? sourcesList = [];
   String? errorMessage;
@@ -10,7 +10,7 @@ class SourceViewModel extends ChangeNotifier {
   void getSourcesL(String categoryId) async {
     //todo : reinitialize
     sourcesList = null;
-    errorMessage = null;  
+    errorMessage = null;
     notifyListeners();
     try {
       var response = await ApiManger.getSources(categoryId);
