@@ -18,6 +18,12 @@ class _SourceTabWidgetState extends State<SourceTabWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.sourceList.isEmpty) {
+      return const Center(
+          child: CircularProgressIndicator(
+        color: AppColors.greyColor,
+      ));
+    }
     return Column(
       children: [
         DefaultTabController(

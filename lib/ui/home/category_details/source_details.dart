@@ -3,8 +3,10 @@ import 'package:news_app/api/api_manger.dart';
 import 'package:news_app/model/my_category.dart';
 import 'package:news_app/model/source_response.dart';
 import 'package:news_app/ui/home/category_details/source_tab_widget.dart';
+import 'package:news_app/ui/home/category_details/source_view_model.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
+import 'package:provider/provider.dart';
 
 class SourceDetails extends StatefulWidget {
   SourceDetails({required this.category});
@@ -14,9 +16,74 @@ class SourceDetails extends StatefulWidget {
 }
 
 class _SourceDetailsState extends State<SourceDetails> {
+  SourceViewModel viewModel = SourceViewModel();
+  @override
+  void initState() {
+    super.initState();
+    viewModel.getSourcesL(widget.category.id ?? "");
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SourceResponse?>(
+    return ChangeNotifierProvider(
+      create: (context) => viewModel,
+      child: Consumer<SourceViewModel>(builder: (context, viewModel, child) {
+        if (viewModel.errorMessage != null) {
+          //todo: error form server
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  viewModel.errorMessage!,
+                  style: AppStyles.medium16Black
+                      .copyWith(color: Theme.of(context).indicatorColor),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    viewModel.getSourcesL(widget.category.id ?? "");
+                  },
+                  child: Text(
+                    "Try Again",
+                    style: AppStyles.medium18Black
+                        .copyWith(color: Theme.of(context).indicatorColor),
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+
+        if (viewModel.sourcesList == null) {
+          //todo: loading
+          return const Center(
+              child: CircularProgressIndicator(
+            color: AppColors.greyColor,
+          ));
+        }
+        //todo: i have data
+
+        return SourceTabWidget(sourceList: viewModel.sourcesList!);
+      }),
+    );
+  }
+}
+/*
+ 
+
+
+Consumer: وظيفته إنه يستمع للتغييرات اللي بتحصل في الـ Provider ويعيد بناء (rebuild) الجزء المحدد من الـ UI عند حدوث أي تغيير في البيانات.
+
+هو بيتيح لك استخدام البيانات من الـ Provider بدون الحاجة إلى Provider.of(context)، وبيساعدك تقلل من عدد الـ rebuilds غير الضرورية.
+
+*/ 
+
+/*
+
+FutureBuilder هو Widget بيُستخدم لما يكون عندك بيانات هتجيلك من مصدر غير متزامن (Asynchronous)، زي API أو قاعدة بيانات، وعايز تعرض البيانات دي بعد ما توصل.
+
+ FutureBuilder<SourceResponse?>(
         future: ApiManger.getSources(widget.category.id ?? ""),
         builder: (context, snapshot) {
           //todo:loading
@@ -66,11 +133,9 @@ class _SourceDetailsState extends State<SourceDetails> {
               ],
             );
           }
-          //todo: 2- server => response successful
+          //todo: 2- server response successful
           var sourceList = snapshot.data?.sources ?? [];
           return SourceTabWidget(
             sourceList: sourceList,
           );
-        });
-  }
-}
+        });*/

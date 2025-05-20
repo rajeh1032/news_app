@@ -4,6 +4,7 @@ import 'package:news_app/model/my_category.dart';
 import 'package:news_app/ui/home/category_details/source_details.dart';
 import 'package:news_app/ui/home/drawer/home_drawer.dart';
 import 'package:news_app/ui/home/home_category/home_category_fragment.dart';
+import 'package:news_app/ui/home/news/search_screen.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,6 +23,23 @@ class _HomeScreenState extends State<HomeScreen> {
           selectedCategory == null ? 'Home' : selectedCategory!.title,
           style: Theme.of(context).textTheme.headlineLarge,
         ),
+        actions: [
+          selectedCategory == null
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                    onPressed: () {
+                      //todo add search screen
+                      Navigator.pushNamed(context, SearchScreen.routeName);
+                    },
+                    icon: Icon(
+                        size: 25,
+                        color: Theme.of(context).indicatorColor,
+                        Icons.search),
+                  ),
+                )
+        ],
       ),
       drawer: Drawer(
         backgroundColor: AppColors.blackColor,

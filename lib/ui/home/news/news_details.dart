@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manger.dart';
 import 'package:news_app/model/source_response.dart';
+import 'package:news_app/ui/home/news/news_bottom_shee.dart';
 import 'package:news_app/ui/home/news/news_item.dart';
+import 'package:news_app/ui/home/news/news_view_model.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
+import 'package:provider/provider.dart';
 
 class NewsDeatils extends StatefulWidget {
   NewsDeatils({required this.source});
@@ -15,10 +18,80 @@ class NewsDeatils extends StatefulWidget {
 }
 
 class _NewsDeatilsState extends State<NewsDeatils> {
+  NewsViewModel viewModel = NewsViewModel();
+  @override
+  void initState() {
+    super.initState();
+    viewModel.getNewsL(sourceId: widget.source.id ?? "");
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: ApiManger.getNewsBySourceId(widget.source.id ?? ""),
+    return ChangeNotifierProvider(
+      create: (context) => viewModel,
+      child: Consumer<NewsViewModel>(builder: (context, viewModel, child) {
+        //child is ? widget that can be initialize in consumer and not rebuild or change, will be fixed
+        // child = Text(
+        //   "Hello",
+        //   style: AppStyles.medium16White
+        //       .copyWith(color: Theme.of(context).indicatorColor),
+        // );
+        if (viewModel.errorMessage != null) {
+          //todo:error from server
+          return Center(
+            child: Column(
+              children: [
+                Text(
+                  viewModel.errorMessage!,
+                  style: AppStyles.medium16White
+                      .copyWith(color: Theme.of(context).indicatorColor),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    viewModel.getNewsL(sourceId: widget.source.id ?? "");
+                  },
+                  child: Text("Try Again",
+                      style: AppStyles.medium16White
+                          .copyWith(color: Theme.of(context).indicatorColor)),
+                ),
+              ],
+            ),
+          );
+        }
+        if (viewModel.newsList == null) {
+          //todo:loading
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColors.greyColor,
+            ),
+          );
+        }
+        return ListView.builder(
+            itemCount: viewModel.newsList!.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  // child!,///call child like this
+                  InkWell(
+                      onTap: () => showModalBottomSheet(
+                          context: context,
+                          builder: (context) => NewsBottomSheet(
+                                news: viewModel.newsList![index],
+                              )),
+                      child: NewsItem(news: viewModel.newsList![index])),
+                ],
+              );
+            });
+      }),
+    );
+  }
+}
+/*
+FutureBuilder(
+        future: ApiManger.getNewsBySourceId(sourceId:  widget.source.id ?? ""),
         builder: (context, snapshot) {
           //todo:if is loading
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,7 +111,7 @@ class _NewsDeatilsState extends State<NewsDeatils> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  ApiManger.getNewsBySourceId(widget.source.id ?? "");
+                  ApiManger.getNewsBySourceId(sourceId: widget.source.id ?? "");
                 });
               },
               child: Text(
@@ -59,7 +132,7 @@ class _NewsDeatilsState extends State<NewsDeatils> {
                 ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        ApiManger.getNewsBySourceId(widget.source.id ?? "");
+                        ApiManger.getNewsBySourceId(sourceId: widget.source.id ?? "");
                       });
                     },
                     child: Text(
@@ -74,8 +147,12 @@ class _NewsDeatilsState extends State<NewsDeatils> {
           return ListView.builder(
               itemCount: newsList.length,
               itemBuilder: (context, index) {
-                return NewsItem(news: newsList[index]);
+                return InkWell(
+                    onTap: () => showModalBottomSheet(
+                        context: context,
+                        builder: (context) => NewsBottomSheet(
+                              news: newsList[index],
+                            )),
+                    child: NewsItem(news: newsList[index]));
               });
-        });
-  }
-}
+        });*/
